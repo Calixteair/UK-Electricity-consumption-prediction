@@ -1,7 +1,7 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from ArchiveLoader import loaderData
+from Archiloader2 import loaderData
 
 # Calculer la matrice de corrélation
 
@@ -19,3 +19,6 @@ corr = df2009_2024.corr()
 plt.figure(figsize=(12,10))
 sns.heatmap(corr, annot=True, cmap='coolwarm')
 plt.show()
+
+# Calculer la matrice de corrélation
+

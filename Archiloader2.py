@@ -22,10 +22,6 @@ def loaderData():
     df = [df2009, df2010, df2011, df2012, df2013, df2014, df2015, df2016, df2017, df2018, df2019, df2020, df2021,
           df2022, df2023, df2024]
 
-    for frame in df:
-        print(frame.shape)
-
-
     df2023_2024 = pd.DataFrame()
     df2019_2024 = pd.DataFrame()
     df2009_2024 = pd.DataFrame()
@@ -38,25 +34,21 @@ def loaderData():
     columns_to_drop2 = ['viking_flow', 'scottish_transfer']
     columns_to_drop3 = ['nsl_flow', 'eleclink_flow']
 
-    for i in range(0,len(df)):
-        print(i)
+    date_format = '%d-%b-%Y'
+
+    for i in range(0, len(df)):
         df[i] = df[i].rename(columns=str.lower)
-        df[i]['settlement_date'] = pd.to_datetime(df[i]['settlement_date'], errors='coerce')
+        try:
+            df[i]['settlement_date'] = pd.to_datetime(df[i]['settlement_date'], format='%d-%b-%Y')
+        except ValueError:
+            df[i]['settlement_date'] = pd.to_datetime(df[i]['settlement_date'], format='%Y-%m-%d')
 
-
-    for i in range(0,len(df)):
+    for i in range(0, len(df)):
         if all(col in df[i].columns for col in columns_to_drop):
             list_of_2023_2024.append(df[i])
         if all(col in df[i].columns for col in columns_to_drop3):
             list_of_2019_2024.append(df[i])
         list_of_2009_2024.append(df[i])
-
-    for frame in df:
-        print(frame.shape)
-
-    print("list_of_2009_2024", len(list_of_2009_2024))
-    print("list_of_2019_2024", len(list_of_2019_2024))
-    print("list_of_2023_2024", len(list_of_2023_2024))
 
     df2009_2024 = pd.concat(list_of_2009_2024, ignore_index=True)
     df2019_2024 = pd.concat(list_of_2019_2024, ignore_index=True)
@@ -65,14 +57,10 @@ def loaderData():
     df2019_2024 = df2019_2024.drop(columns=columns_to_drop2, errors='ignore')
     df2009_2024 = df2009_2024.drop(columns=columns_to_drop, errors='ignore')
 
-    print("df2009_2024.shape , expected : 263808   =>", df2009_2024.shape)
-    print("df2019_2024.shape , expected : 88512    =>", df2019_2024.shape)
-    print("df2023_2024.shape , expected : 18384    =>", df2023_2024.shape)
+    for frame in df:
+        print(frame['settlement_date'].head(5))
+
+    return [df2009_2024, df2019_2024, df2023_2024]
 
 
 
-
-
-
-
-loaderData()
